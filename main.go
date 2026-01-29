@@ -45,6 +45,10 @@ func main() {
 	productService := services.NewProductService(productRepo)
 	productHandler := handlers.NewProductHandler(productService)
 
+	categoryRepo := repositories.NewCategoryRepository(db)
+	categoryService := services.NewCategoryService(categoryRepo)
+	categoryHandler := handlers.NewCategoryHandler(categoryService)
+
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(map[string]string{
@@ -55,6 +59,9 @@ func main() {
 
 	http.HandleFunc("/api/produk", productHandler.HandleProducts)
 	http.HandleFunc("/api/produk/", productHandler.HandleProductByID)
+
+	http.HandleFunc("/api/kategori", categoryHandler.HandleCategories)
+	http.HandleFunc("/api/kategori/", categoryHandler.HandleCategoryByID)
 
 	fmt.Println("Server running di localhost:" + config.Port)
 
